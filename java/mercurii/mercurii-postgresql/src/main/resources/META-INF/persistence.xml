@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence
+    version="3.0"
+    xmlns="https://jakarta.ee/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+>
+    <persistence-unit name="mercurii">
+        <!-- a JTA data source is a cleaner approach than filtering this configuration file with Maven,
+             but requires an application server to provide the data source, which seems to be too much overhead.
+             DBCP2 can be used to provide a connection pool for the data source.
+        <jta-data-source>mercurii-ds</jta-data-source>
+        -->
+        
+        <class>be.macharis.toon.mercurii.postgresql.model.Owner</class>
+        
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        
+        <properties>
+            <property name="hibernate.connection.driver_class" value="${connection.driverClass}" />
+            <property name="hibernate.connection.url" value="${connection.url}" />
+            <property name="hibernate.connection.username" value="${connection.username}" />
+            <property name="hibernate.connection.password" value="${connection.password}" />
+            
+            <property name="hibernate.hbm2ddl.auto" value="validate" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+        </properties>
+    </persistence-unit>
+</persistence>
