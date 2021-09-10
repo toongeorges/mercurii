@@ -3,6 +3,9 @@ DROP TABLE IF EXISTS public.asset_item;
 DROP TABLE IF EXISTS public.asset;
 DROP TABLE IF EXISTS public.issuer;
 DROP TABLE IF EXISTS public.owner;
+DROP SEQUENCE IF EXISTS public.asset_asset_id_seq;
+DROP SEQUENCE IF EXISTS public.asset_item_asset_id_seq;
+DROP SEQUENCE IF EXISTS public.asset_item_asset_item_id_seq;
 
 -- Table: public.owner
 CREATE TABLE IF NOT EXISTS public.owner
@@ -25,10 +28,18 @@ CREATE TABLE IF NOT EXISTS public.issuer
 TABLESPACE pg_default;
 
 -- Table: public.asset
+
+CREATE SEQUENCE IF NOT EXISTS public.asset_asset_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
 CREATE TABLE IF NOT EXISTS public.asset
 (
     issuer_id uuid NOT NULL,
-    asset_id serial NOT NULL,
+    asset_id integer NOT NULL DEFAULT nextval('asset_asset_id_seq'::regclass),
     name text COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT asset_pkey PRIMARY KEY (issuer_id, asset_id),
     CONSTRAINT asset_issuer_id_fkey FOREIGN KEY (issuer_id)
@@ -41,11 +52,25 @@ CREATE TABLE IF NOT EXISTS public.asset
 TABLESPACE pg_default;
 
 -- Table: public.asset_item
+CREATE SEQUENCE public.asset_item_asset_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+CREATE SEQUENCE public.asset_item_asset_item_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
 CREATE TABLE IF NOT EXISTS public.asset_item
 (
     issuer_id uuid NOT NULL,
-    asset_id serial NOT NULL,
-    asset_item_id bigserial NOT NULL,
+    asset_id integer NOT NULL DEFAULT nextval('asset_item_asset_id_seq'::regclass),
+    asset_item_id bigint NOT NULL DEFAULT nextval('asset_item_asset_item_id_seq'::regclass),
     owner_id uuid NOT NULL,
     serial_number text COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT asset_item_pkey PRIMARY KEY (issuer_id, asset_id, asset_item_id),
