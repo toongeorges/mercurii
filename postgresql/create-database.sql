@@ -1,6 +1,6 @@
 -- Drop role and database
-DROP DATABASE mercurii;
-DROP ROLE mercurius;
+DROP DATABASE IF EXISTS mercurii;
+DROP ROLE IF EXISTS mercurius;
 
 -- Role: mercurius
 CREATE ROLE mercurius WITH
